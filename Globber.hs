@@ -4,15 +4,15 @@ type GlobPattern = String
 
 matchGlob :: GlobPattern -> String -> Bool
 matchGlob glob@(globFirst:globRest) matched = case matched of
-    [] | glob == "*" -> True
+    "" | glob == "*" -> True
        | otherwise   -> False
-    _  -> case globFirst of
+    (matchedFirst:matchedRest) -> case globFirst of
         '\\'
-            | globRest == [] -> False
+            | globRest == "" -> False
             | head globRest == matchedFirst -> matchGlob (tail globRest) matchedRest
             | otherwise -> False
         '*'
-            | globRest == [] -> True
+            | globRest == "" -> True
             | otherwise -> matchGlob globRest (takeLast globRestLen matched) where
                 takeLast n = reverse . take n . reverse
                 globRestLen = length globRest
@@ -20,8 +20,5 @@ matchGlob glob@(globFirst:globRest) matched = case matched of
         _
             | globFirst == matchedFirst -> matchGlob globRest matchedRest
             | otherwise -> False
-    where
-        matchedFirst = head matched
-        matchedRest  = tail matched
-matchGlob [] [] = True
-matchGlob [] _ = False
+matchGlob "" "" = True
+matchGlob "" _ = False
