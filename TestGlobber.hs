@@ -13,6 +13,17 @@ main = hspec $ describe "Testing Globber" $ do
         it "shouldn't match non-empty string" $
             matchGlob "" "string" `shouldBe` False
 
+    describe "literal string cases" $ do
+        it "matches a literal string" $
+            matchGlob "foo" "foo" `shouldBe` True
+        it "does not match a different string" $
+            matchGlob "bar" "bad" `shouldBe` False
+        it "does not match a longer string" $
+            matchGlob "foo" "foot" `shouldBe` False
+        it "does not match a shorter string" $
+            matchGlob "bar" "ba" `shouldBe` False
+
+
     describe "question mark cases" $ do
         it "matches any single character" $
             matchGlob "?" "*" `shouldBe` True
