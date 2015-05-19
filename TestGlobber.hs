@@ -33,3 +33,17 @@ main = hspec $ describe "Testing Globber" $ do
             matchGlob "?" "xs" `shouldBe` False
         it "doesn't match the empty string" $
             matchGlob "?" "" `shouldBe` False
+
+    describe "star cases" $ do
+        it "matches any single character" $
+            matchGlob "*" "a" `shouldBe` True
+        it "matches any character within a longer string" $
+            matchGlob "*s" "xs" `shouldBe` True
+        it "can match a larger string" $
+            matchGlob "*" "baz" `shouldBe` True
+        it "matches the empty string" $
+            matchGlob "*" "" `shouldBe` True
+        it "does not match if literal characters before do not match" $
+            matchGlob "foo*" "bard" `shouldBe` False
+        it "does not match if literal characters after do not match" $
+            matchGlob "*d" "foot" `shouldBe` False
