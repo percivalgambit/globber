@@ -18,3 +18,7 @@ main = hspec $ describe "Testing Globber" $ do
             matchGlob "?" "*" `shouldBe` True
         it "matches any character within a longer string" $
             matchGlob "?s" "xs" `shouldBe` True
+        it "only matches a single character" $
+            matchGlob "?" "xs" `shouldBe` False
+        it "doesn't match the empty string" $
+            matchGlob "?" "" `shouldBe` False

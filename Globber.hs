@@ -3,5 +3,7 @@ module Globber (matchGlob) where
 type GlobPattern = String
 
 matchGlob :: GlobPattern -> String -> Bool
-matchGlob ('?':xs) (_:ys) = matchGlob xs ys
+matchGlob ('?':globRest) matcher  = case matcher of
+    [] -> False
+    (_:matcherRest) -> matchGlob globRest matcherRest
 matchGlob xs ys = xs == ys
