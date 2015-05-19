@@ -3,16 +3,20 @@ module Globber (matchGlob) where
 type GlobPattern = String
 
 matchGlob :: GlobPattern -> String -> Bool
-matchGlob ('*':globRest) matcher = case globRest of
+matchGlob ('\\':literalChar:globRest) (matchedFirst:matchedRest)
+    | literalChar == matchedFirst = matchGlob globRest matchedRest
+    | otherwise = False
+matchGlob "\\" _ = False
+matchGlob ('*':globRest) matched = case globRest of
     [] -> True
-    _ -> matchGlob globRest (takeLast globRestLen matcher) where
+    _ -> matchGlob globRest (takeLast globRestLen matched) where
         takeLast n = reverse . take n . reverse
         globRestLen = length globRest
-matchGlob ('?':globRest) matcher  = case matcher of
+matchGlob ('?':globRest) matched  = case matched of
     [] -> False
-    (_:matcherRest) -> matchGlob globRest matcherRest
-matchGlob (globFirst:globRest) (matcherFirst:matcherRest)
-    | globFirst == matcherFirst = matchGlob globRest matcherRest
+    (_:matchedRest) -> matchGlob globRest matchedRest
+matchGlob (globFirst:globRest) (matchedFirst:matchedRest)
+    | globFirst == matchedFirst = matchGlob globRest matchedRest
     | otherwise = False
 matchGlob [] [] = True
 matchGlob _ [] = False
