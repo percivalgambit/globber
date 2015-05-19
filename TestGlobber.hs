@@ -50,6 +50,12 @@ main = hspec $ describe "Testing Globber" $ do
             matchGlob "foo*" "foo" `shouldBe` True
             matchGlob "*oot" "oot" `shouldBe` True
             matchGlob "fo*ot" "foot" `shouldBe` True
+        it "can match when there are multiple stars in a pattern" $ do
+            matchGlob "f**d" "food" `shouldBe` True
+            matchGlob "*f*o*o*d*" "food" `shouldBe` True
+            matchGlob "f*b*" "foobar" `shouldBe` True
+            matchGlob "**" "foobar" `shouldBe` True
+            matchGlob "*oo*" "foobar" `shouldBe` True
         it "does not match if literal characters in pattern do not match" $ do
             matchGlob "foo*" "bard" `shouldBe` False
             matchGlob "*d" "foot" `shouldBe` False

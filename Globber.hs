@@ -1,5 +1,7 @@
 module Globber (matchGlob) where
 
+import Data.List
+
 type GlobPattern = String
 
 matchGlob :: GlobPattern -> String -> Bool
@@ -13,9 +15,7 @@ matchGlob glob@(globFirst:globRest) matched = case matched of
             | otherwise                     -> False
         '*'
             | globRest == "" -> True
-            | otherwise      -> matchGlob globRest (takeLast globRestLen matched) where
-                takeLast n  = reverse . take n . reverse
-                globRestLen = length globRest
+            | otherwise      -> or $ fmap (matchGlob globRest) (tails matched)
         '?' -> matchGlob globRest matchedRest
         _
             | globFirst == matchedFirst -> matchGlob globRest matchedRest
