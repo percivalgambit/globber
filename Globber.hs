@@ -11,4 +11,9 @@ matchGlob ('*':globRest) matcher = case globRest of
 matchGlob ('?':globRest) matcher  = case matcher of
     [] -> False
     (_:matcherRest) -> matchGlob globRest matcherRest
-matchGlob xs ys = xs == ys
+matchGlob (globFirst:globRest) (matcherFirst:matcherRest)
+    | globFirst == matcherFirst = matchGlob globRest matcherRest
+    | otherwise = False
+matchGlob [] [] = True
+matchGlob _ [] = False
+matchGlob [] _ = False

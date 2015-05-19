@@ -27,8 +27,9 @@ main = hspec $ describe "Testing Globber" $ do
     describe "question mark cases" $ do
         it "matches any single character" $
             matchGlob "?" "*" `shouldBe` True
-        it "matches any character within a longer string" $
+        it "matches any character within a longer string" $ do
             matchGlob "?s" "xs" `shouldBe` True
+            matchGlob "x?" "xs" `shouldBe` True
         it "only matches a single character" $
             matchGlob "?" "xs" `shouldBe` False
         it "doesn't match the empty string" $
@@ -43,7 +44,6 @@ main = hspec $ describe "Testing Globber" $ do
             matchGlob "*" "baz" `shouldBe` True
         it "matches the empty string" $
             matchGlob "*" "" `shouldBe` True
-        it "does not match if literal characters before do not match" $
+        it "does not match if literal characters in pattern do not match" $ do
             matchGlob "foo*" "bard" `shouldBe` False
-        it "does not match if literal characters after do not match" $
             matchGlob "*d" "foot" `shouldBe` False
