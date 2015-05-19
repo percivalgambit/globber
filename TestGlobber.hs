@@ -44,8 +44,10 @@ main = hspec $ describe "Testing Globber" $ do
             matchGlob "*" "baz" `shouldBe` True
             matchGlob "*t" "foot" `shouldBe` True
             matchGlob "f*" "food" `shouldBe` True
-        it "matches the empty string" $
+            matchGlob "f*t" "foot" `shouldBe` True
+        it "matches the empty string" $ do
             matchGlob "*" "" `shouldBe` True
+            matchGlob "foo*" "foo" `shouldBe` True
         it "does not match if literal characters in pattern do not match" $ do
             matchGlob "foo*" "bard" `shouldBe` False
             matchGlob "*d" "foot" `shouldBe` False
@@ -54,12 +56,16 @@ main = hspec $ describe "Testing Globber" $ do
         it "can match any literal character, even a special symbol" $ do
             matchGlob "\\f" "f" `shouldBe` True
             matchGlob "\\*" "*" `shouldBe` True
+            matchGlob "\\\\" "\\" `shouldBe` True
             matchGlob "foo\\*" "foo*" `shouldBe` True
             matchGlob "\\foot" "foot" `shouldBe` True
         it "does not match a different character" $ do
             matchGlob "\\f" "b" `shouldBe` False
+            matchGlob "\\*" "f" `shouldBe` False
             matchGlob "\\*oo" "foo" `shouldBe` False
             matchGlob "foo\\d" "foot" `shouldBe` False
+        it "does not match the empty string" $
+            matchGlob "\\*" "" `shouldBe` False
         it "does not match if there is no character after the backslash" $ do
             matchGlob "\\" "" `shouldBe` False
             matchGlob "foo\\" "foo" `shouldBe` False
