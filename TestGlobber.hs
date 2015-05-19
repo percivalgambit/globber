@@ -48,6 +48,8 @@ main = hspec $ describe "Testing Globber" $ do
         it "matches the empty string" $ do
             matchGlob "*" "" `shouldBe` True
             matchGlob "foo*" "foo" `shouldBe` True
+            matchGlob "*oot" "oot" `shouldBe` True
+            matchGlob "fo*ot" "foot" `shouldBe` True
         it "does not match if literal characters in pattern do not match" $ do
             matchGlob "foo*" "bard" `shouldBe` False
             matchGlob "*d" "foot" `shouldBe` False
