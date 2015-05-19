@@ -23,7 +23,6 @@ main = hspec $ describe "Testing Globber" $ do
         it "does not match a shorter string" $
             matchGlob "bar" "ba" `shouldBe` False
 
-
     describe "question mark cases" $ do
         it "matches any single character" $
             matchGlob "?" "*" `shouldBe` True
@@ -38,10 +37,13 @@ main = hspec $ describe "Testing Globber" $ do
     describe "star cases" $ do
         it "matches any single character" $
             matchGlob "*" "a" `shouldBe` True
-        it "matches any character within a longer string" $
+        it "matches any character within a longer string" $ do
             matchGlob "*s" "xs" `shouldBe` True
-        it "can match a larger string" $
+            matchGlob "x*" "xs" `shouldBe` True
+        it "can match a larger string" $ do
             matchGlob "*" "baz" `shouldBe` True
+            matchGlob "*t" "foot" `shouldBe` True
+            matchGlob "f*" "food" `shouldBe` True
         it "matches the empty string" $
             matchGlob "*" "" `shouldBe` True
         it "does not match if literal characters in pattern do not match" $ do
