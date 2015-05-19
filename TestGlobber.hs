@@ -48,6 +48,8 @@ main = hspec $ describe "Testing Globber" $ do
         it "matches the empty string" $ do
             matchGlob "*" "" `shouldBe` True
             matchGlob "foo*" "foo" `shouldBe` True
+            matchGlob "*oot" "oot" `shouldBe` True
+            matchGlob "fo*ot" "foot" `shouldBe` True
         it "can match when there are multiple stars in a pattern" $ do
             matchGlob "f**d" "food" `shouldBe` True
             matchGlob "*f*o*o*d*" "food" `shouldBe` True
