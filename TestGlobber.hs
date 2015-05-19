@@ -33,6 +33,8 @@ main = hspec $ describe "Testing Globber" $ do
             matchGlob "?" "xs" `shouldBe` False
         it "doesn't match the empty string" $
             matchGlob "?" "" `shouldBe` False
+        it "doesn't match when there are too many characters" $
+            matchGlob "????" "foo" `shouldBe` False
 
     describe "star cases" $ do
         it "matches any single character" $
@@ -77,3 +79,14 @@ main = hspec $ describe "Testing Globber" $ do
         it "does not match if there is no character after the backslash" $ do
             matchGlob "\\" "" `shouldBe` False
             matchGlob "foo\\" "foo" `shouldBe` False
+
+    describe "question mark and star character cases" $ do
+        it "can match correctly when both in a pattern" $ do
+            matchGlob "?oo*" "foobar" `shouldBe` True
+            matchGlob "fo?*" "foobar" `shouldBe` True
+            matchGlob "fooba*?" "foobar" `shouldBe` True
+            matchGlob "*???*" "foo" `shouldBe` True
+        it "doesn't match when literal characters don't match" $
+            matchGlob "*?oo" "bar" `shouldBe` False
+        it "doesn't match when there are too many characters" $
+            matchGlob "fooba*??" "foobar" `shouldBe` False
